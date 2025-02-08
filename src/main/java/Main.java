@@ -19,9 +19,9 @@ public class Main {
                 new Toyota("Corolla",2025,"green",true,"не_знаю")
         );
         for(Car car : cars){
-            Car.AutoAfterYear(car, 2006);                   //выводит информацию об автомобилях, выпущенных после 2006 года, иначе выводит надпись «устаревший авто»
+            Car.AutoAfterYear(car, 2006);                   //выводит информацию об автомобилях, выпущенных после 2006 года
             Car.ChangeColor(car, "green", "red");   //изменяет цвет авто на красный, если у авто зеленый цвет
-            Car.UsedAuto(car);                                       //Выводит звук у БУ автомобилей и их марку;
+            Car.UsedAuto(car);                                       //Выводит звук у БУ автомобилей и их марку
             System.out.println();
 
         }

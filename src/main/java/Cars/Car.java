@@ -1,10 +1,6 @@
 package Cars;
 
-
-
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public abstract class Car {
@@ -15,7 +11,7 @@ public abstract class Car {
 
     private String color;
     private boolean used;
-    private String brand; //РАЗОБРАТЬСЯ КАК ТУТ РАБОТАЕТ GETTER
+    private String brand;
 
     public Car(String name, int year, String color, boolean used, String transmission){
         this.name = name;
@@ -63,9 +59,7 @@ public abstract class Car {
     }
     //Изменяем цвет авто
     public static void ChangeColor(Car car, String oldColor, String newColor){
-        boolean clAuto = false;
         if(car.color == oldColor) {
-            clAuto = true;
             car.color = newColor;
             System.out.println("Теперь это авто " + newColor + ":" + car.ShowInfo(car));
         }
