@@ -1,9 +1,6 @@
 package Cars;
 
 import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 public abstract class Car {
@@ -40,42 +37,41 @@ public abstract class Car {
         }
     }
 
+    //Отображаем информацию об авто
+    private String ShowInfo(Car car) {
+        String info = " " +
+                car.getBrand() + " " +
+                car.name + ", " +
+                car.year + ", " +
+                car.color + ", " +
+                "Б/У?: "+ car.used + ", " +
+                car.transmission;
+        return info;
+    }
     //Отображаем информацию об авто после определенного года
-    public static void ShowInfo(List<Car> cars, int afterYear) {
-        for(Car car : cars){
-            if(car.year > afterYear){
-                System.out.println("Новенький авто: " + car.name + ", " + car.year + ", " + car.color + ", " + car.used + ", " + car.transmission + ", " + car.getBrand());
-            }
-            else{
-                System.out.println("Устаревший авто: " + car.name + ", " + car.year);
-            }
+    public static void AutoAfterYear(Car car, int afterYear){
+        if(car.year > afterYear){
+            System.out.println("Новенький авто:" + car.ShowInfo(car));
+        }
+        else{
+            System.out.println("Устаревший авто:" + car.ShowInfo(car));
         }
     }
-
     //Изменяем цвет авто
-    public static void СhangeColor(List<Car> cars, String oldColor, String newColor){
-        boolean clAuto = false;
-        for(Car car : cars){
-            if(car.color == oldColor) {
-                clAuto = true;
-                car.color = newColor;
-                System.out.println("Теперь это авто " + newColor + ": "+ car.getBrand()+ " " + car.name + ", " + car.year + ", " + car.color);
-            }
+    public static void ChangeColor(Car car, String oldColor, String newColor){
+        if(car.color == oldColor) {
+            car.color = newColor;
+            System.out.println("Теперь это авто " + newColor + ":" + car.ShowInfo(car));
         }
-        if(!clAuto)
-            System.out.println(oldColor +" авто нет");
     }
 
-    //Выводит звук у БУ автомобилей и их марку;
-    public static void UsedAuto(List<Car> cars){
-        for(Car car : cars){
-            if(car.used == true){
-                System.out.print(car.getBrand() + " sound:    ");
-                car.Sound();
-
-            }
-
+    //Выводит звук у БУ автомобиля и их марку;
+    public static void UsedAuto(Car car){
+        if(car.used){
+            System.out.print(car.getBrand() + " sound:    ");
+            car.Sound();
         }
+
     }
 
     public abstract void Sound();
