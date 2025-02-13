@@ -1,7 +1,5 @@
 import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.awt.*;
 
@@ -12,12 +10,10 @@ public class WebHooks {
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
 
-        Configuration.pageLoadStrategy = PageLoadStrategy.EAGER.toString();
+        Configuration.browser = "chrome";
         Configuration.timeout = 15000;
         Configuration.browserSize = width + "x" + height;;
         Selenide.open("https://edujira.ifellow.ru/");
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments();
     }
     @AfterEach
     public void afterTest(){
