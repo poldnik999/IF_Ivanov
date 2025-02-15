@@ -1,3 +1,5 @@
+package webHooks;
+
 import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
 
