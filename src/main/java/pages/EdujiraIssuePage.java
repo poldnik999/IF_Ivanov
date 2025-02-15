@@ -11,19 +11,22 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class EdujiraIssuePage {
 
-    private final SelenideElement status = $x("//span[@id='status-val']");
-    private final SelenideElement fixVersion = $x("//span[@id='fixVersions-field']");
-    private final SelenideElement dropDownField = $x("//a[@id='opsbar-transitions_more']");
-    private final SelenideElement completeButton = $x("//span[@class='trigger-label'][contains(text(), 'Выполнено')]");
+    private final SelenideElement status = $x("//span[@id='status-val']")
+            .as("Статус задачи");
+    private final SelenideElement fixVersion = $x("//span[@id='fixVersions-field']")
+            .as("Версия");
+    private final SelenideElement dropDownField = $x("//a[@id='opsbar-transitions_more']")
+            .as("Выпадающий список статусов задач");
+    private final SelenideElement completeButton = $x("//span[@class='trigger-label'][contains(text(), 'Выполнено')]")
+            .as("кнопка изменения статуса задачи");
 
-    public void verifyIssueDetails() {
-        assertThat(status.getText()).isEqualTo("СДЕЛАТЬ");
-        assertThat(fixVersion.getText()).contains("Version 2.0");
+    public void verifyIssueDetails(String expectedStatus, String expectedVersion) {
+        assertThat(status.getText()).isEqualTo(expectedStatus);
+        assertThat(fixVersion.getText()).contains(expectedVersion);
     }
     public void completeIssue() {
         dropDownField.click();
-        completeButton.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
-        sleep(1000);
+        completeButton.shouldBe(Condition.visible).click();
     }
 
 }

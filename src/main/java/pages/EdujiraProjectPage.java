@@ -14,12 +14,17 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class EdujiraProjectPage {
 
-    private final SelenideElement issuesCount = $x("//div[@class='showing']//span[contains(text(), '1 из')]");
-    private final SelenideElement createIssueButton = $x("//a[@id='create_link']");
-    private final SelenideElement searchField = $x("//input[@id='quickSearchInput']");
+    private final SelenideElement issuesCount = $x("//div[@class='showing']//span[contains(text(), '1 из')]")
+            .as("Счетчик задач");
+    private final SelenideElement createIssueButton = $x("//a[@id='create_link']")
+            .as("Создать задачу");
+    private final SelenideElement searchField = $x("//input[@id='quickSearchInput']")
+            .as("Поле поиска");
+    private final SelenideElement result = $x("//li[1][@class='quick-search-result-item']")
+            .as("Первый результат поиска");
 
     public int getInitialIssuesCount() {
-        String text = issuesCount.shouldBe(Condition.visible, Duration.ofSeconds(2)).getText(); // "1 из 30"
+        String text = issuesCount.shouldBe(Condition.visible, Duration.ofSeconds(2)).getText();
         return Integer.parseInt(text.split(" ")[2]);
     }
 
@@ -30,20 +35,18 @@ public class EdujiraProjectPage {
     }
 
     public CreateIssueDialogPage clickCreateIssue() {
-        createIssueButton.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
+        createIssueButton.shouldBe(Condition.visible).click();
         return new CreateIssueDialogPage();
     }
 
     public void searchInfo(String search){
-        searchField.shouldBe(Condition.visible, Duration.ofSeconds(4)).click();
-        searchField.shouldBe(Condition.visible, Duration.ofSeconds(4)).setValue(search);
+        searchField.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
+        searchField.shouldBe(Condition.visible).setValue(search);
     }
 
     public EdujiraIssuePage openIssuePage(String search){
         searchInfo(search);
-        sleep(2000);
-        SelenideElement result = $x("//li[1][@class='quick-search-result-item']");
-        Assertions.assertThat(result.getText()).contains(search);
+        Assertions.assertThat(result.shouldBe(Condition.visible).getText()).contains(search);
         result.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
         return new EdujiraIssuePage();
     }
