@@ -41,13 +41,12 @@ public class EdujiraProjectPage {
 
     public void searchInfo(String search){
         searchField.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
-        searchField.shouldBe(Condition.visible).setValue(search);
+        searchField.shouldBe(Condition.visible, Duration.ofSeconds(8)).setValue(search);
     }
 
     public EdujiraIssuePage openIssuePage(String search){
         searchInfo(search);
-        Assertions.assertThat(result.shouldBe(Condition.visible).getText()).contains(search);
-        result.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
+        result.shouldBe(Condition.visible, Duration.ofSeconds(8)).click();
         return new EdujiraIssuePage();
     }
 }

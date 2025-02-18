@@ -25,7 +25,7 @@ public class EdujiraIssuePage {
         assertThat(fixVersion.getText()).contains(expectedVersion);
     }
     public void completeIssue() {
-        dropDownField.click();
+        dropDownField.shouldBe(Condition.visible).click();
         completeButton.shouldBe(Condition.visible).click();
     }
 

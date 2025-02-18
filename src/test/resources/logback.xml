@@ -1,0 +1,17 @@
+<configuration>
+
+    <!-- Установите уровень логирования для корневого логгера -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <!-- Настройка консольного аппендера -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Установите уровень логирования для Selenide (или других пакетов) -->
+    <logger name="com.codeborne.selenide" level="WARN" />
+</configuration>
