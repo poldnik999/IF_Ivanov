@@ -27,13 +27,4 @@ public class WebHooks {
     public void afterTest(){
         Selenide.closeWebDriver();
     }
-
-//    @BeforeAll
-//    static void setupAllureReports() {
-//        AllureSelenide allureSelenide = new AllureSelenide()
-//                .screenshots(false)
-//                .savePageSource(true);
-//
-//        SelenideLogger.addListener("AllureSelenide", allureSelenide);
-//    }
 }
