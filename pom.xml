@@ -13,10 +13,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <allure.version>2.25.0</allure.version>
-    <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
-    <junit-platform-surefire-provider.version>1.1.0</junit-platform-surefire-provider.version>
     <aspectj.version>1.8.10</aspectj.version>
-    <allure-junit5.version>2.28.1</allure-junit5.version>
     <project.build.directory>target</project.build.directory>
   </properties>
 
