@@ -2,12 +2,14 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.assertj.core.api.Assertions;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.switchTo;
 
 public class CreateIssueDialogPage {
 
@@ -34,11 +36,14 @@ public class CreateIssueDialogPage {
     private final SelenideElement performerButton = $x("//button[@id='assign-to-me-trigger']")
             .as("Кнопка исполнителя");
 
+    @Step("Упрощенное создание задачи")
     public EdujiraProjectPage createBug(String summary) {
         summaryInput.shouldBe(Condition.visible, Duration.ofSeconds(2)).setValue(summary);
         submitButton.click();
         return new EdujiraProjectPage();
     }
+
+    @Step("Создание задачи с заполненными полями")
     public EdujiraProjectPage createBug(String summary, String desc, String env, String tag,
                                         String fixInVersion, String tochedInVersion, String serios) {
         descriptionArea.shouldBe(Condition.visible).click();
@@ -58,7 +63,8 @@ public class CreateIssueDialogPage {
         return new EdujiraProjectPage();
 
     }
-    public void changeTextInsideIframe(SelenideElement frame, String textValue) {
+
+    private void changeTextInsideIframe(SelenideElement frame, String textValue) {
         String frameId = frame.attr("id");
         switchTo().frame(frameId);
         SelenideElement paragraph = $x("//p");

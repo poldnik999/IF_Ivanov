@@ -2,12 +2,8 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.assertj.core.api.Assertions;
+import io.qameta.allure.Step;
 
-
-import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class EdujiraLoginPage {
@@ -19,6 +15,7 @@ public class EdujiraLoginPage {
     private final SelenideElement submitButton = $x("//input[@id='login']")
             .as("Кнопка подтверждения входа");
 
+    @Step("Заполнение полей пользователя {username} и пароля {password}")
     public EdujiraHomePage login(String username, String password) {
         this.login.shouldBe(Condition.visible).setValue(username);
         this.password.shouldBe(Condition.visible).setValue(password);

@@ -1,63 +1,80 @@
 package pagesTest;
 
+import config.ConfigLoader;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
-import pages.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import pages.EdujiraHomePage;
+import pages.EdujiraLoginPage;
+import pages.EdujiraProjectPage;
 import webHooks.WebHooks;
-
 
 import static com.codeborne.selenide.WebDriverConditions.title;
 
+@DisplayName("Edujira Test")
 public class EdujiraTest extends WebHooks {
     static EdujiraHomePage dashboard;
     static EdujiraProjectPage project;
-    static EdujiraIssuePage issuePage;
     static int initialIssuesCount;
 
+    private static ConfigLoader prop = new ConfigLoader();
+
     @Test
+    @DisplayName("Авторизация пользователя")
     public void loginTest() {
         dashboard = new EdujiraLoginPage()
-                .login("AT10", "Qwerty123");
+                .login(prop.getProperty("user.login"), prop.getProperty("user.password"));
 
         Assertions.assertThat(title("System Dashboard - Jira"));
     }
 
     @Test
+    @DisplayName("Открытие проекта TEST")
     public void openProjectTest() {
         loginTest();
         project = dashboard.openTestProject();
-        Assertions.assertThat(title("TEST"));
+        Assertions.assertThat(title(prop.getProperty("project.name")));
     }
 
     @Test
+    @DisplayName("Проверка счетчика задач")
     public void verifyIssuesCountTest() {
         openProjectTest();
-
         initialIssuesCount = project.getInitialIssuesCount();
         project.clickCreateIssue()
-                .createBug("Проверка счетчика AT10");
+                .createBug(
+                        prop.getProperty("issue.counter.name") + " " +
+                                prop.getProperty("user.login")
+                );
         project.verifyIssuesCountIncreased(initialIssuesCount);
     }
 
     @Test
+    @DisplayName("Проверка статуса и версии задачи")
     public void verifyIssueDetailsTest() {
         openProjectTest();
-        project.openIssuePage("TestSeleniumATHomework")
-                .verifyIssueDetails("СДЕЛАТЬ", "Version 2.0");
+        project.openIssuePage(prop.getProperty("issue.verify.name"))
+                .verifyIssueDetails(
+                        prop.getProperty("issue.verify.status"),
+                        prop.getProperty("issue.verify.version")
+                );
     }
 
     @Test
+    @DisplayName("Создание задачи и закрытие")
     public void createAndCloseBugTest() {
         openProjectTest();
+        String issueName = prop.getProperty("issue.create.name") + " " + prop.getProperty("user.login");
+
         project.clickCreateIssue()
-                .createBug("Проверка создания задачи AT10",
-                        "blablabla",
-                        "blabla",
-                        "test",
-                        "Version 1.0",
-                        "Version 1.0",
-                        "Тривиальный")
-                .openIssuePage("Проверка создания задачи AT10")
+                .createBug(issueName,
+                        prop.getProperty("issue.create.desc"),
+                        prop.getProperty("issue.create.env"),
+                        prop.getProperty("issue.create.tag"),
+                        prop.getProperty("issue.create.fVersion"),
+                        prop.getProperty("issue.create.tVersion"),
+                        prop.getProperty("issue.create.serious"))
+                .openIssuePage(issueName)
                 .completeIssue();
     }
 }
