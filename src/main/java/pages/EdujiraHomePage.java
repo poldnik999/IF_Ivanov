@@ -3,19 +3,20 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class EdujiraHomePage {
 
     private final SelenideElement projectsMenu = $x("//a[@id='browse_link']")
             .as("Выпадающий список проектов");
-    private final SelenideElement testProjectLink = $x("//a[contains(text(),'Test (TEST)')]")
-            .as("Проект TEST");
+    private final SelenideElement projectLink = $x("//a[@id='admin_main_proj_link_lnk']")
+            .as("Ссылка на проект");
 
-    @Step("Открытие проекта TEST")
-    public EdujiraProjectPage openTestProject() {
+    @Step("Открытие проекта {projectName}")
+    public EdujiraProjectPage openProject(String projectName) {
         projectsMenu.hover().click();
-        testProjectLink.click();
+        projectLink.shouldHave(text(projectName)).click();
         return new EdujiraProjectPage();
     }
 }

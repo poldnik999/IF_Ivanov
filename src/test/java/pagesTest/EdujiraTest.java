@@ -32,7 +32,7 @@ public class EdujiraTest extends WebHooks {
     @DisplayName("Открытие проекта TEST")
     public void openProjectTest() {
         loginTest();
-        project = dashboard.openTestProject();
+        project = dashboard.openProject(prop.getProperty("project.name"));
         Assertions.assertThat(title(prop.getProperty("project.name")));
     }
 
