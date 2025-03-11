@@ -4,11 +4,11 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-import org.assertj.core.api.Assertions;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.title;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EdujiraProjectPage {
@@ -21,6 +21,8 @@ public class EdujiraProjectPage {
             .as("Поле поиска");
     private final SelenideElement result = $x("//li[1][@class='quick-search-result-item']")
             .as("Первый результат поиска");
+    private final SelenideElement popupWindowButton = $x("//button[@id='aui-close-button']")
+            .as("Закрыть всплывающее окно");
 
     @Step("Получение кол-ва задач")
     public int getInitialIssuesCount() {
@@ -29,7 +31,7 @@ public class EdujiraProjectPage {
     }
 
     @Step("Проверка на изменение кол-ва задач")
-    public void verifyIssuesCountIncreased(int initialCount) {
+    public void assertIssuesCountIncreased(int initialCount) {
         Selenide.refresh();
         int newCount = getInitialIssuesCount();
         assertThat(newCount).isEqualTo(initialCount + 1);
@@ -45,13 +47,20 @@ public class EdujiraProjectPage {
     public void searchInfo(String search){
         searchField.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
         searchField.shouldBe(Condition.visible).setValue(search);
+        assertThat(searchField.getValue()).isEqualTo(search);
     }
 
     @Step("Открытие задачи {search} из результатов поиска")
     public EdujiraIssuePage openIssuePage(String search){
         searchInfo(search);
-        Assertions.assertThat(result.shouldBe(Condition.visible).getText()).contains(search);
+        assertThat(result.shouldBe(Condition.visible).getText()).contains(search);
         result.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
         return new EdujiraIssuePage();
+    }
+
+    @Step("Страница задачи {titleName} открыта")
+    public EdujiraProjectPage assertNewPageIsOpen(String titleName) {
+        assertThat(title()).contains(titleName);
+        return this;
     }
 }

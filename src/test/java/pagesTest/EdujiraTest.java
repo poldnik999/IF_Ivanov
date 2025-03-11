@@ -1,7 +1,6 @@
 package pagesTest;
 
 import config.ConfigLoader;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pages.EdujiraHomePage;
@@ -9,13 +8,11 @@ import pages.EdujiraLoginPage;
 import pages.EdujiraProjectPage;
 import webHooks.WebHooks;
 
-import static com.codeborne.selenide.WebDriverConditions.title;
-
-@DisplayName("Edujira Test")
+@DisplayName("UI тесты Edujira")
 public class EdujiraTest extends WebHooks {
-    static EdujiraHomePage dashboard;
-    static EdujiraProjectPage project;
-    static int initialIssuesCount;
+
+    private static EdujiraHomePage dashboard;
+    private static EdujiraProjectPage project;
 
     private static ConfigLoader prop = new ConfigLoader();
 
@@ -23,30 +20,32 @@ public class EdujiraTest extends WebHooks {
     @DisplayName("Авторизация пользователя")
     public void loginTest() {
         dashboard = new EdujiraLoginPage()
-                .login(prop.getProperty("user.login"), prop.getProperty("user.password"));
-
-        Assertions.assertThat(title("System Dashboard - Jira"));
+                .fillAuthField(prop.getProperty("user.login"), prop.getProperty("user.password"))
+                .assertFieldIsFill()
+                .login()
+                .assertNewPageIsOpen();
     }
 
     @Test
-    @DisplayName("Открытие проекта TEST")
+    @DisplayName("Открытие проекта")
     public void openProjectTest() {
         loginTest();
-        project = dashboard.openProject(prop.getProperty("project.name"));
-        Assertions.assertThat(title(prop.getProperty("project.name")));
+        project = dashboard
+                .openProject(prop.getProperty("project.name"))
+                .assertNewPageIsOpen(prop.getProperty("project.name"));
+
     }
 
     @Test
     @DisplayName("Проверка счетчика задач")
     public void verifyIssuesCountTest() {
         openProjectTest();
-        initialIssuesCount = project.getInitialIssuesCount();
+        int initialIssuesCount = project.getInitialIssuesCount();
         project.clickCreateIssue()
-                .createBug(
-                        prop.getProperty("issue.counter.name") + " " +
-                                prop.getProperty("user.login")
-                );
-        project.verifyIssuesCountIncreased(initialIssuesCount);
+                .assertNewPageIsOpen()
+                .fillIssueForm(prop.getProperty("issue.counter.name") + " " + prop.getProperty("user.login"))
+                .createIssue()
+                .assertIssuesCountIncreased(initialIssuesCount);
     }
 
     @Test
@@ -54,7 +53,7 @@ public class EdujiraTest extends WebHooks {
     public void verifyIssueDetailsTest() {
         openProjectTest();
         project.openIssuePage(prop.getProperty("issue.verify.name"))
-                .verifyIssueDetails(
+                .assertIssueDetails(
                         prop.getProperty("issue.verify.status"),
                         prop.getProperty("issue.verify.version")
                 );
@@ -62,19 +61,23 @@ public class EdujiraTest extends WebHooks {
 
     @Test
     @DisplayName("Создание задачи и закрытие")
-    public void createAndCloseBugTest() {
+    public void createAndCloseBugTest() throws InterruptedException {
         openProjectTest();
         String issueName = prop.getProperty("issue.create.name") + " " + prop.getProperty("user.login");
 
         project.clickCreateIssue()
-                .createBug(issueName,
+                .assertNewPageIsOpen()
+                .fillIssueForm(
+                        issueName,
                         prop.getProperty("issue.create.desc"),
                         prop.getProperty("issue.create.env"),
-                        prop.getProperty("issue.create.tag"),
+                        prop.getProperty("issue.create.tags"),
                         prop.getProperty("issue.create.fVersion"),
                         prop.getProperty("issue.create.tVersion"),
                         prop.getProperty("issue.create.serious"))
+                .createIssue()
                 .openIssuePage(issueName)
-                .completeIssue();
+                .completeIssue()
+                .assertIssueDetails("ГОТОВО");
     }
 }

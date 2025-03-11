@@ -3,13 +3,13 @@ package pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
-import org.assertj.core.api.Assertions;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateIssueDialogPage {
 
@@ -35,16 +35,17 @@ public class CreateIssueDialogPage {
             .as("Нажатая кнопка 'Визуальный'");
     private final SelenideElement performerButton = $x("//button[@id='assign-to-me-trigger']")
             .as("Кнопка исполнителя");
+    private final SelenideElement issueDialog = $x("//header[@id='aui-dialog2-header jira-dialog-core-heading']");
 
-    @Step("Упрощенное создание задачи")
-    public EdujiraProjectPage createBug(String summary) {
+    @Step("Заполнение обязательных полей формы")
+    public CreateIssueDialogPage fillIssueForm(String summary) {
         summaryInput.shouldBe(Condition.visible, Duration.ofSeconds(2)).setValue(summary);
         submitButton.click();
-        return new EdujiraProjectPage();
+        return this;
     }
 
-    @Step("Создание задачи с заполненными полями")
-    public EdujiraProjectPage createBug(String summary, String desc, String env, String tag,
+    @Step("Заполнение большинства полей формы")
+    public CreateIssueDialogPage fillIssueForm(String summary, String desc, String env, String tag,
                                         String fixInVersion, String tochedInVersion, String serios) {
         descriptionArea.shouldBe(Condition.visible).click();
         changeTextInsideIframe(descriptionArea, desc);
@@ -57,13 +58,22 @@ public class CreateIssueDialogPage {
         performerButton.click();
         seriousnessEditor.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
         seriousnessEditor.selectOptionContainingText(serios);
-        Assertions.assertThat(visualButton).isEqualTo(expectedVisualButton);
-        submitButton.click();
-
-        return new EdujiraProjectPage();
+        assertThat(visualButton).isEqualTo(expectedVisualButton);
+        return this;
 
     }
 
+    @Step("Создание задачи")
+    public EdujiraProjectPage createIssue() {
+        submitButton.click();
+        return new EdujiraProjectPage();
+    }
+
+    @Step("Проверяем что окно открыто")
+    public CreateIssueDialogPage assertNewPageIsOpen() {
+        assertThat(issueDialog.isDisplayed());
+        return this;
+    }
     private void changeTextInsideIframe(SelenideElement frame, String textValue) {
         String frameId = frame.attr("id");
         switchTo().frame(frameId);
