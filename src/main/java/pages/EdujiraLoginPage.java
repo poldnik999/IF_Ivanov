@@ -21,19 +21,19 @@ public class EdujiraLoginPage {
 
     @Step("Аутентификация пользователя")
     public EdujiraHomePage login() {
-
         submitButton.shouldBe(Condition.visible).click();
         return new EdujiraHomePage();
+
     }
 
     @Step("Заполнение полей пользователя {username} и пароля {password}")
     public EdujiraLoginPage fillAuthField(String username, String password) {
         this.username = username;
         this.password = password;
-
         loginField.shouldBe(Condition.visible).setValue(this.username);
         passwordField.shouldBe(Condition.visible).setValue(this.password);
         return this;
+
     }
 
     @Step("Проверяем поля ввода логина и пароля")
@@ -41,5 +41,6 @@ public class EdujiraLoginPage {
         assertThat(loginField.getValue()).isEqualTo(username);
         assertThat(passwordField.getValue()).isEqualTo(password);
         return this;
+
     }
 }

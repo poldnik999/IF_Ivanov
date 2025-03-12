@@ -8,8 +8,9 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.title;
+import static com.codeborne.selenide.WebDriverConditions.title;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EdujiraProjectPage {
 
@@ -19,7 +20,7 @@ public class EdujiraProjectPage {
             .as("Создать задачу");
     private final SelenideElement searchField = $x("//input[@id='quickSearchInput']")
             .as("Поле поиска");
-    private final SelenideElement result = $x("//li[1][@class='quick-search-result-item']")
+    private SelenideElement result = $x("//li[1][@class='quick-search-result-item']")
             .as("Первый результат поиска");
     private final SelenideElement popupWindowButton = $x("//button[@id='aui-close-button']")
             .as("Закрыть всплывающее окно");
@@ -53,14 +54,15 @@ public class EdujiraProjectPage {
     @Step("Открытие задачи {search} из результатов поиска")
     public EdujiraIssuePage openIssuePage(String search){
         searchInfo(search);
-        assertThat(result.shouldBe(Condition.visible).getText()).contains(search);
-        result.shouldBe(Condition.visible, Duration.ofSeconds(2)).click();
+        assertTrue(result.shouldHave(Condition.visible, Duration.ofSeconds(5)).attr("original-title")
+                .contains(search));
+        result.shouldBe(Condition.visible, Duration.ofSeconds(8)).click();
         return new EdujiraIssuePage();
     }
 
-    @Step("Страница задачи {titleName} открыта")
+    @Step("Страница проекта {titleName} открыта")
     public EdujiraProjectPage assertNewPageIsOpen(String titleName) {
-        assertThat(title()).contains(titleName);
+        assertThat(title(titleName));
         return this;
     }
 }

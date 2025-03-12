@@ -5,8 +5,8 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.WebDriverConditions.title;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.codeborne.selenide.Selenide.title;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EdujiraHomePage {
 
@@ -24,7 +24,7 @@ public class EdujiraHomePage {
 
     @Step("Проверяем что страница открыта")
     public EdujiraHomePage assertNewPageIsOpen() {
-        assertThat(title("System Dashboard - Jira"));
+        assertTrue(title().contains("System Dashboard - Jira"));
         return this;
     }
 }

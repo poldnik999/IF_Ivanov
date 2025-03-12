@@ -53,6 +53,7 @@ public class EdujiraTest extends WebHooks {
     public void verifyIssueDetailsTest() {
         openProjectTest();
         project.openIssuePage(prop.getProperty("issue.verify.name"))
+                .assertNewPageIsOpen(prop.getProperty("issue.verify.name"))
                 .assertIssueDetails(
                         prop.getProperty("issue.verify.status"),
                         prop.getProperty("issue.verify.version")
@@ -77,7 +78,8 @@ public class EdujiraTest extends WebHooks {
                         prop.getProperty("issue.create.serious"))
                 .createIssue()
                 .openIssuePage(issueName)
+                .assertNewPageIsOpen(issueName)
                 .completeIssue()
-                .assertIssueDetails("ГОТОВО");
+                .assertIssueDetails(prop.getProperty("issue.create.status"));
     }
 }

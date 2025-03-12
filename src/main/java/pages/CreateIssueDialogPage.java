@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreateIssueDialogPage {
 
@@ -35,7 +36,8 @@ public class CreateIssueDialogPage {
             .as("Нажатая кнопка 'Визуальный'");
     private final SelenideElement performerButton = $x("//button[@id='assign-to-me-trigger']")
             .as("Кнопка исполнителя");
-    private final SelenideElement issueDialog = $x("//header[@id='aui-dialog2-header jira-dialog-core-heading']");
+    private final SelenideElement issueDialog = $x("//header[@id='aui-dialog2-header jira-dialog-core-heading']")
+            .as("Диалоговое окно создания задачи");
 
     @Step("Заполнение обязательных полей формы")
     public CreateIssueDialogPage fillIssueForm(String summary) {
@@ -71,7 +73,7 @@ public class CreateIssueDialogPage {
 
     @Step("Проверяем что окно открыто")
     public CreateIssueDialogPage assertNewPageIsOpen() {
-        assertThat(issueDialog.isDisplayed());
+        assertTrue(issueDialog.isDisplayed());
         return this;
     }
     private void changeTextInsideIframe(SelenideElement frame, String textValue) {
