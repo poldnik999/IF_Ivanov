@@ -10,6 +10,7 @@ import java.time.Duration;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.WebDriverConditions.title;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EdujiraProjectPage {
@@ -22,20 +23,18 @@ public class EdujiraProjectPage {
             .as("Поле поиска");
     private SelenideElement result = $x("//li[1][@class='quick-search-result-item']")
             .as("Первый результат поиска");
-    private final SelenideElement popupWindowButton = $x("//button[@id='aui-close-button']")
-            .as("Закрыть всплывающее окно");
 
     @Step("Получение кол-ва задач")
     public int getInitialIssuesCount() {
+        Selenide.refresh();
         String text = issuesCount.shouldBe(Condition.visible, Duration.ofSeconds(2)).getText();
         return Integer.parseInt(text.split(" ")[2]);
     }
 
     @Step("Проверка на изменение кол-ва задач")
     public void assertIssuesCountIncreased(int initialCount) {
-        Selenide.refresh();
         int newCount = getInitialIssuesCount();
-        assertThat(newCount).isEqualTo(initialCount + 1);
+        assertEquals(initialCount + 1, newCount);
     }
 
     @Step("Нажатие кнопки создания задачи")
@@ -54,8 +53,7 @@ public class EdujiraProjectPage {
     @Step("Открытие задачи {search} из результатов поиска")
     public EdujiraIssuePage openIssuePage(String search){
         searchInfo(search);
-        assertTrue(result.shouldHave(Condition.visible, Duration.ofSeconds(5)).attr("original-title")
-                .contains(search));
+        assertTrue(result.shouldHave(Condition.visible, Duration.ofSeconds(8)).attr("original-title").contains(search));
         result.shouldBe(Condition.visible, Duration.ofSeconds(8)).click();
         return new EdujiraIssuePage();
     }

@@ -36,13 +36,12 @@ public class CreateIssueDialogPage {
             .as("Нажатая кнопка 'Визуальный'");
     private final SelenideElement performerButton = $x("//button[@id='assign-to-me-trigger']")
             .as("Кнопка исполнителя");
-    private final SelenideElement issueDialog = $x("//header[@id='aui-dialog2-header jira-dialog-core-heading']")
+    private final SelenideElement issueDialog = $x("//section[@id='create-issue-dialog']")
             .as("Диалоговое окно создания задачи");
 
     @Step("Заполнение обязательных полей формы")
     public CreateIssueDialogPage fillIssueForm(String summary) {
         summaryInput.shouldBe(Condition.visible, Duration.ofSeconds(2)).setValue(summary);
-        submitButton.click();
         return this;
     }
 
@@ -73,7 +72,7 @@ public class CreateIssueDialogPage {
 
     @Step("Проверяем что окно открыто")
     public CreateIssueDialogPage assertNewPageIsOpen() {
-        assertTrue(issueDialog.isDisplayed());
+        assertTrue(issueDialog.shouldBe(Condition.visible).isDisplayed());
         return this;
     }
     private void changeTextInsideIframe(SelenideElement frame, String textValue) {

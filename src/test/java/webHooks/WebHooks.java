@@ -2,14 +2,12 @@ package webHooks;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import config.ConfigLoader;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.awt.*;
 
 public class WebHooks {
 
@@ -17,13 +15,14 @@ public class WebHooks {
 
     @BeforeEach
     public void initBrowser(){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
         Configuration.browser = "chrome";
         Configuration.timeout = 15000;
-        Configuration.browserSize = width + "x" + height;;
         Selenide.open(prop.getProperty("edujira.url"));
+        WebDriverRunner.getWebDriver().manage().window().maximize();
+
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
+                .screenshots(Boolean.parseBoolean(prop.getProperty("save.screen")))
+                .savePageSource(Boolean.parseBoolean(prop.getProperty("save.page.source"))));
     }
 
     @AfterEach
@@ -31,8 +30,4 @@ public class WebHooks {
         Selenide.closeWebDriver();
     }
 
-    @BeforeAll
-    public static void allureSetup() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true));
-    }
 }
