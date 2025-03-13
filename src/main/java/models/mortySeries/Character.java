@@ -2,9 +2,11 @@ package models.mortySeries;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Getter
 public class Character {
     public Integer id;
     public String name;
@@ -13,7 +15,7 @@ public class Character {
     public String type;
     public String gender;
     public Location location;
-    public String[] episode;
+    private String[] episode;
     public String url;
     public String created;
 }
