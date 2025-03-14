@@ -1,9 +1,18 @@
 package api.morty;
 
+import api.BaseApi;
+import config.ConfigLoader;
 import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.given;
 
-public class MortyApi extends BaseMortyApi {
+public class MortyApi extends BaseApi {
+
+    private static ConfigLoader prop = new ConfigLoader();
+
+    public MortyApi() {
+        super(prop.getProperty("morty.url"));
+    }
 
     public Response getCharacterByName(String name) {
         return given()
@@ -11,13 +20,7 @@ public class MortyApi extends BaseMortyApi {
                 .get("/character");
     }
 
-    public Response getEpisode(String url) {
-        return given()
-                .baseUri("")
-                .get(url);
-    }
-
-    public Response getCharacter(String url) {
+    public Response getResource(String url) {
         return given()
                 .baseUri("")
                 .get(url);

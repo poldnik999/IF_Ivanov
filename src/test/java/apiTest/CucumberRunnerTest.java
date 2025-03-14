@@ -5,7 +5,7 @@ import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
 import org.junit.platform.suite.api.Suite;
 
-import static io.cucumber.core.options.Constants.*;
+import static io.cucumber.junit.platform.engine.Constants.*;
 
 
 @Suite
@@ -16,4 +16,5 @@ import static io.cucumber.core.options.Constants.*;
 @ConfigurationParameter(key = EXECUTION_DRY_RUN_PROPERTY_NAME, value = "FALSE")
 
 public class CucumberRunnerTest {
+
 }

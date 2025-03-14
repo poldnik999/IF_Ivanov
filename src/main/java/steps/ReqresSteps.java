@@ -2,9 +2,13 @@ package steps;
 
 import api.reqres.ReqresApi;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import config.ConfigLoader;
+import io.cucumber.java.ru.Когда;
+import io.cucumber.java.ru.Тогда;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import models.reqres.User;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -16,19 +20,26 @@ public class ReqresSteps {
     private ValidatableResponse response;
     private User oldUser;
 
-    public void createNewUserFromFile(String jsonPath, String setName, String setJob, int expectedStatusCode) throws IOException {
+    private static ConfigLoader prop = new ConfigLoader();
 
-        oldUser = objectMapper.readValue(new File(jsonPath), User.class);
+    @Когда("Создаем нового пользователя с именем {string} и должностью {string}; Статус код - {int}")
+    @Step("Создаем нового пользователя с именем {setName} и должностью {setJob}; Статус код - {expectedStatusCode}")
+    public void createNewUserFromFile(String setName, String setJob, int expectedStatusCode) throws IOException {
+        oldUser = objectMapper.readValue(new File(prop.getProperty("json.path")), User.class);
         oldUser.setName(setName);
         oldUser.setJob(setJob);
         response = reqresApi.postUser(oldUser).statusCode(expectedStatusCode);
+        Allure.addAttachment("User " + oldUser.getName(), oldUser.toString());
 
     }
-    public void verifyResponse() {
 
+    @Тогда("Проверяем соответствие данных в ответе")
+    @Step("Проверяем соответствие данных в ответе")
+    public void verifyResponse() {
         User createdUser = response.extract().body().as(User.class);
-        assert createdUser.getName().equals(oldUser.name);
-        assert createdUser.getJob().equals(oldUser.job);
+        Allure.addAttachment("Created user " + createdUser.getName(), createdUser.toString());
+        assert createdUser.getName().equals(oldUser.getName());
+        assert createdUser.getJob().equals(oldUser.getJob());
     }
 }
 
