@@ -68,12 +68,14 @@ public class CreateIssueDialogPage {
     public EdujiraProjectPage createIssue() {
         submitButton.click();
         return new EdujiraProjectPage();
+
     }
 
     @Step("Проверяем что окно открыто")
     public CreateIssueDialogPage assertNewPageIsOpen() {
         assertTrue(issueDialog.shouldBe(Condition.visible).isDisplayed());
         return this;
+
     }
     private void changeTextInsideIframe(SelenideElement frame, String textValue) {
         String frameId = frame.attr("id");

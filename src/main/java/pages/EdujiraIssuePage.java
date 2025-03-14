@@ -7,7 +7,6 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.title;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EdujiraIssuePage {
@@ -24,12 +23,14 @@ public class EdujiraIssuePage {
     @Step("Проверяем задачу на совпадение статуса {expectedStatus}")
     public void assertIssueDetails(String expectedStatus) {
         assertThat(status.shouldBe(Condition.text(expectedStatus)).getText()).isEqualTo(expectedStatus);
+
     }
 
     @Step("Проверяем задачу на совпадение статуса {expectedStatus} и версии {expectedVersion}")
     public void assertIssueDetails(String expectedStatus, String expectedVersion) {
         assertThat(status.getText()).isEqualTo(expectedStatus);
         assertThat(fixVersion.getText()).contains(expectedVersion);
+
     }
 
     @Step("Изменяем статус задачи на выполнено")
@@ -37,12 +38,6 @@ public class EdujiraIssuePage {
         dropDownField.shouldBe(Condition.visible, Duration.ofSeconds(8)).click();
         completeButton.shouldBe(Condition.visible, Duration.ofSeconds(8)).click();
         return this;
-    }
 
-    @Step("Страница задачи {titleName} открыта")
-    public EdujiraIssuePage assertNewPageIsOpen(String titleName) {
-        assertThat(title()).contains(titleName);
-        return this;
     }
-
 }

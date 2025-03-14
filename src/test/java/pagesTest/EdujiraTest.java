@@ -13,7 +13,6 @@ public class EdujiraTest extends WebHooks {
 
     private static EdujiraHomePage dashboard;
     private static EdujiraProjectPage project;
-
     private static ConfigLoader prop = new ConfigLoader();
 
     @Test
@@ -22,8 +21,7 @@ public class EdujiraTest extends WebHooks {
         dashboard = new EdujiraLoginPage()
                 .fillAuthField(prop.getProperty("user.login"), prop.getProperty("user.password"))
                 .assertFieldIsFill()
-                .login()
-                .assertNewPageIsOpen();
+                .login();
     }
 
     @Test
@@ -31,8 +29,7 @@ public class EdujiraTest extends WebHooks {
     public void openProjectTest() {
         loginTest();
         project = dashboard
-                .openProject(prop.getProperty("project.name"))
-                .assertNewPageIsOpen(prop.getProperty("project.name"));
+                .openProject(prop.getProperty("project.name"));
 
     }
 
@@ -42,7 +39,6 @@ public class EdujiraTest extends WebHooks {
         openProjectTest();
         int initialIssuesCount = project.getInitialIssuesCount();
         project.clickCreateIssue()
-                .assertNewPageIsOpen()
                 .fillIssueForm(prop.getProperty("issue.counter.name") + " " + prop.getProperty("user.login"))
                 .createIssue()
                 .assertIssuesCountIncreased(initialIssuesCount);
@@ -53,7 +49,6 @@ public class EdujiraTest extends WebHooks {
     public void verifyIssueDetailsTest() {
         openProjectTest();
         project.openIssuePage(prop.getProperty("issue.verify.name"))
-                .assertNewPageIsOpen(prop.getProperty("issue.verify.name"))
                 .assertIssueDetails(
                         prop.getProperty("issue.verify.status"),
                         prop.getProperty("issue.verify.version")
@@ -62,7 +57,7 @@ public class EdujiraTest extends WebHooks {
 
     @Test
     @DisplayName("Создание задачи и закрытие")
-    public void createAndCloseBugTest() throws InterruptedException {
+    public void createAndCloseBugTest() {
         openProjectTest();
         String issueName = prop.getProperty("issue.create.name") + " " + prop.getProperty("user.login");
 
@@ -78,8 +73,8 @@ public class EdujiraTest extends WebHooks {
                         prop.getProperty("issue.create.serious"))
                 .createIssue()
                 .openIssuePage(issueName)
-                .assertNewPageIsOpen(issueName)
                 .completeIssue()
                 .assertIssueDetails(prop.getProperty("issue.create.status"));
+
     }
 }

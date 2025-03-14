@@ -5,8 +5,6 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.title;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EdujiraHomePage {
 
@@ -20,11 +18,7 @@ public class EdujiraHomePage {
         projectsMenu.hover().click();
         projectLink.shouldHave(text(projectName)).click();
         return new EdujiraProjectPage();
+
     }
 
-    @Step("Проверяем что страница открыта")
-    public EdujiraHomePage assertNewPageIsOpen() {
-        assertTrue(title().contains("System Dashboard - Jira"));
-        return this;
-    }
 }

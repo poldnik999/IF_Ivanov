@@ -19,4 +19,4 @@
 
 Запуск тестов через консоль ``` mvn clean test ```<br>
 Генерация Allure отчета через консоль ```mvn allure:report ```<br>
-Просмотр Allure отчетка через консоль ```mvn allure:serve ```
+Просмотр Allure отчета через консоль ```mvn allure:serve ```

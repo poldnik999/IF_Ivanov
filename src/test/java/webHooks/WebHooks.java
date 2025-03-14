@@ -7,6 +7,7 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import config.ConfigLoader;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 public class WebHooks {
@@ -20,6 +21,10 @@ public class WebHooks {
         Selenide.open(prop.getProperty("edujira.url"));
         WebDriverRunner.getWebDriver().manage().window().maximize();
 
+    }
+
+    @BeforeAll
+    public static void setUpAllure() {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
                 .screenshots(Boolean.parseBoolean(prop.getProperty("save.screen")))
                 .savePageSource(Boolean.parseBoolean(prop.getProperty("save.page.source"))));
@@ -29,5 +34,6 @@ public class WebHooks {
     public void afterTest(){
         Selenide.closeWebDriver();
     }
+
 
 }
